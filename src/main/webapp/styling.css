@@ -47,7 +47,7 @@ body {margin:0;}
     text-align: left;
     /*padding: 12px 0;*/
     color: black;
-    font-size: 20px;
+    font-size: 15px;
 }
 
 .active {
@@ -57,14 +57,12 @@ body {margin:0;}
 .pick_barcode {
     width: 50%;
     background-color: LightSeaGreen ;
-    overflow: auto;
-    padding-left:25px;
+    padding-left:25px;  
 }
 
 .pick_barcode h3 {
-    text-align: centre;
     color: white;
-    font-size: 20px;
+    font-size: 15px;
     font-style: Verdana ;
 }
 
@@ -145,13 +143,22 @@ img {
 }
 
 th {
-    font-size: 20px;
+    font-size: 18px;
 }
 
-td a {
-    font-size: 20px;
+#selectionTable tbody tr td:first-child a {
+    font-size: 18px;
 }
 
-td {
-   font-size: 20px; 
+#selectionTable tbody tr td:nth-child(2) {
+   font-size: 18px; 
 }
+
+table {
+    width:50%;
+}
+
+.slidercontain{
+    width:60%;
+}
+
