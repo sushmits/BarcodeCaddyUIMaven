@@ -58,7 +58,7 @@ public class BarcodeCaddyServlet extends HttpServlet {
         json.put("MouseTCRa", eachSetValue[7]);
         json.put("MouseTCRb", eachSetValue[8]);
         json.put("Amaryllis", eachSetValue[9]);
-        json.put("Pre-selected barcodes (as sequences (space/comma separated) )", eachSetValue[10]);
+        json.put("barcodes", eachSetValue[10]);
         
         // Things went well so set the HTTP response code to 200 OK
         response.setStatus(200);
