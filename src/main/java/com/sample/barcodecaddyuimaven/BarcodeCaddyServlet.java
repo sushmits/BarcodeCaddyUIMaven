@@ -25,6 +25,9 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import org.json.JSONArray;
 import org.json.JSONObject;
+import java.io.* ; 
+import java.util.Scanner;
+import javax.servlet.RequestDispatcher;
 
 @WebServlet(name = "BarcodeCaddyServlet",
         urlPatterns = {"/BarcodeCaddyServlet"})
@@ -65,9 +68,53 @@ public class BarcodeCaddyServlet extends HttpServlet {
         // tell the client the type of the response
         response.setContentType("text/plain;charset=UTF-8");
 
-        // sending the string to be returned 
-        PrintWriter out = response.getWriter(); 
-        // to send the json string to the android application.
-        out.println(json);
+//        // sending the string to be returned 
+//        PrintWriter out = response.getWriter(); 
+//        // to send the json string to the android application.
+//        out.println(json);
+          
+          Process p = Runtime.getRuntime().exec("perl C:\\Users\\sushm\\Documents\\Sushmita\\Girihlet_Internship\\BarcodeCaddyUIMaven\\src\\main\\java\\com\\sample\\barcodecaddyuimaven\\barcode_diversity\\barcode_json.pl '"+json.toString()+"'");
+          BufferedReader stdInput = new BufferedReader(new InputStreamReader(p.getInputStream()));
+          BufferedReader stdError = new BufferedReader(new InputStreamReader(p.getErrorStream()));
+          String s = null ;
+          while((s=stdError.readLine())!=null)
+          {
+              System.out.println(s);
+          }
+          
+          StringBuilder jsonPerlOut = new StringBuilder();
+          while((s=stdInput.readLine())!=null)
+          {
+              jsonPerlOut.append(s);
+          }
+          String jsonOut = jsonPerlOut.toString();
+          
+          JSONObject jsonOutObj = null;
+          
+          if(jsonOut.contains("ERR")){
+              request.setAttribute("ERR", jsonOut);
+          }
+          else{
+              jsonOutObj = new JSONObject("{\"csv\":\"tmp/bc9025.csv\",\"html\":\"bc9025.html\",\"dist\":\"tmp/mat9025.html\",\"fig_lnk\":\"tmp/second0.gif\",\"fig\":\"tmp/bc9025.png\"}\n" +
+"\n" +
+"");
+              request.setAttribute("fig_link", jsonOutObj.get("fig_lnk"));
+              request.setAttribute("csv", jsonOutObj.get("csv"));
+              request.setAttribute("dist", jsonOutObj.get("dist"));
+              StringBuilder sbtable = new StringBuilder();
+              try{
+                  Scanner sc = new Scanner(new File(jsonOutObj.get("html").toString()));
+                  
+                  while(sc.hasNextLine()){
+                  sbtable.append(sc.nextLine());
+                  }
+              }
+              catch(FileNotFoundException f){
+                  f.printStackTrace();
+              }
+              request.setAttribute("table_html", sbtable.toString());
+          }  
+          RequestDispatcher view = request.getRequestDispatcher("ui_design.jsp");
+          view.forward(request, response);
     }
 }
